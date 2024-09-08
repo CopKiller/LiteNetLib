@@ -25,17 +25,18 @@ namespace LiteNetLib.Utils
         }
 
         protected delegate void SubscribeDelegate(NetDataReader reader, object userData);
-        public readonly NetSerializer NetSerializer;
-        private readonly Dictionary<ulong, SubscribeDelegate> _callbacks = new Dictionary<ulong, SubscribeDelegate>();
+        private readonly NetSerializer _netSerializer;
+        private readonly Dictionary<ulong, SubscribeDelegate> _callbacks = new();
+        private NetDataWriter NetDataWriter { get;set; } = new();
 
         public NetPacketProcessor()
         {
-            NetSerializer = new NetSerializer();
+            _netSerializer = new NetSerializer();
         }
 
         public NetPacketProcessor(int maxStringLength)
         {
-            NetSerializer = new NetSerializer(maxStringLength);
+            _netSerializer = new NetSerializer(maxStringLength);
         }
 
         protected virtual ulong GetHash<T>()
@@ -64,7 +65,7 @@ namespace LiteNetLib.Utils
         /// <typeparam name="T">INetSerializable structure</typeparam>
         public void RegisterNestedType<T>() where T : struct, INetSerializable
         {
-            NetSerializer.RegisterNestedType<T>();
+            _netSerializer.RegisterNestedType<T>();
         }
 
         /// <summary>
@@ -74,7 +75,7 @@ namespace LiteNetLib.Utils
         /// <param name="readDelegate"></param>
         public void RegisterNestedType<T>(Action<NetDataWriter, T> writeDelegate, Func<NetDataReader, T> readDelegate)
         {
-            NetSerializer.RegisterNestedType<T>(writeDelegate, readDelegate);
+            _netSerializer.RegisterNestedType<T>(writeDelegate, readDelegate);
         }
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace LiteNetLib.Utils
         /// <typeparam name="T">INetSerializable class</typeparam>
         public void RegisterNestedType<T>(Func<T> constructor) where T : class, INetSerializable
         {
-            NetSerializer.RegisterNestedType(constructor);
+            _netSerializer.RegisterNestedType(constructor);
         }
 
         /// <summary>
@@ -125,7 +126,7 @@ namespace LiteNetLib.Utils
         T>(NetDataWriter writer, T packet) where T : class, new()
         {
             WriteHash<T>(writer);
-            NetSerializer.Serialize(writer, packet);
+            _netSerializer.Serialize(writer, packet);
         }
 
         public void WriteNetSerializable<T>(NetDataWriter writer, ref T packet) where T : INetSerializable
@@ -157,11 +158,11 @@ namespace LiteNetLib.Utils
 #endif
         T>(Action<T> onReceive, Func<T> packetConstructor) where T : class, new()
         {
-            NetSerializer.Register<T>();
+            _netSerializer.Register<T>();
             _callbacks[GetHash<T>()] = (reader, userData) =>
             {
                 var reference = packetConstructor();
-                NetSerializer.Deserialize(reader, reference);
+                _netSerializer.Deserialize(reader, reference);
                 onReceive(reference);
             };
         }
@@ -178,11 +179,11 @@ namespace LiteNetLib.Utils
 #endif
         T, TUserData>(Action<T, TUserData> onReceive, Func<T> packetConstructor) where T : class, new()
         {
-            NetSerializer.Register<T>();
+            _netSerializer.Register<T>();
             _callbacks[GetHash<T>()] = (reader, userData) =>
             {
                 var reference = packetConstructor();
-                NetSerializer.Deserialize(reader, reference);
+                _netSerializer.Deserialize(reader, reference);
                 onReceive(reference, (TUserData)userData);
             };
         }
@@ -199,11 +200,11 @@ namespace LiteNetLib.Utils
 #endif
         T>(Action<T> onReceive) where T : class, new()
         {
-            NetSerializer.Register<T>();
+            _netSerializer.Register<T>();
             var reference = new T();
             _callbacks[GetHash<T>()] = (reader, userData) =>
             {
-                NetSerializer.Deserialize(reader, reference);
+                _netSerializer.Deserialize(reader, reference);
                 onReceive(reference);
             };
         }
@@ -220,11 +221,11 @@ namespace LiteNetLib.Utils
 #endif
         T, TUserData>(Action<T, TUserData> onReceive) where T : class, new()
         {
-            NetSerializer.Register<T>();
+            _netSerializer.Register<T>();
             var reference = new T();
             _callbacks[GetHash<T>()] = (reader, userData) =>
             {
-                NetSerializer.Deserialize(reader, reference);
+                _netSerializer.Deserialize(reader, reference);
                 onReceive(reference, (TUserData)userData);
             };
         }
@@ -291,6 +292,13 @@ namespace LiteNetLib.Utils
         public void ClearSubscriptions()
         {
             _callbacks.Clear();
+        }
+
+        public void Send<T>(NetPeer peer, T packet, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered) where T : class, new()
+        {
+            NetDataWriter.Reset();
+            Write(NetDataWriter, packet);
+            peer.Send(NetDataWriter, deliveryMethod);
         }
     }
 }
