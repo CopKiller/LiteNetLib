@@ -300,5 +300,18 @@ namespace LiteNetLib.Utils
             Write(NetDataWriter, packet);
             peer.Send(NetDataWriter, deliveryMethod);
         }
+
+        public void SendNetSerializable<T>(NetPeer peer, ref T packet, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered) where T : INetSerializable
+        {
+            NetDataWriter.Reset();
+            WriteNetSerializable(NetDataWriter, ref packet);
+            peer.Send(NetDataWriter, deliveryMethod);
+        }
+
+        public void Send(NetPeer peer, byte[] data, DeliveryMethod deliveryMethod = DeliveryMethod.ReliableOrdered)
+        {
+            peer.Send(data, deliveryMethod);
+        }
+
     }
 }
