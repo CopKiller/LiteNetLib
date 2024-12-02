@@ -313,7 +313,7 @@ namespace LiteNetLib
         /// Experimental feature mostly for servers. Only for Windows/Linux
         /// use direct socket calls for send/receive to drastically increase speed and reduce GC pressure
         /// </summary>
-        public bool UseNativeSockets = false;
+        public bool UseNativeSockets = true;
 
         /// <summary>
         /// Disconnect peers if HostUnreachable or NetworkUnreachable spawned (old behaviour 0.9.x was true)
@@ -1609,7 +1609,7 @@ namespace LiteNetLib
 
             //Stop
             CloseSocket();
-            
+
 #if UNITY_SOCKET_FIX
             if (_useSocketFix)
             {
@@ -1617,7 +1617,7 @@ namespace LiteNetLib
                 _pausedSocketFix = null;
             }
 #endif
-            
+
             _updateTriggerEvent.Set();
             if (!_manualMode)
             {
