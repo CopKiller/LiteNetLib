@@ -1,2 +1,9 @@
-
-{"items":[{"name":"NetSerializer usage","href":"netserializerusage.html","topicHref":"netserializerusage.html"}]}
+{
+    "items": [
+        {
+            "name": "NetSerializer usage",
+            "href": "netserializerusage.html",
+            "topicHref": "netserializerusage.html"
+        }
+    ]
+}

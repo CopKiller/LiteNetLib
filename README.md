@@ -16,28 +16,29 @@ Lite reliable UDP library for .NET Standard 2.0 (Mono, .NET Core, .NET Framework
 
 ## Build
 
-### [NuGet](https://www.nuget.org/packages/LiteNetLib/) [![NuGet](https://img.shields.io/nuget/v/LiteNetLib?color=blue)](https://www.nuget.org/packages/LiteNetLib/) [![NuGet](https://img.shields.io/nuget/vpre/LiteNetLib)](https://www.nuget.org/packages/LiteNetLib/#versions-body-tab) [![NuGet](https://img.shields.io/nuget/dt/LiteNetLib)](https://www.nuget.org/packages/LiteNetLib/) 
+### [NuGet](https://www.nuget.org/packages/LiteNetLib/) [![NuGet](https://img.shields.io/nuget/v/LiteNetLib?color=blue)](https://www.nuget.org/packages/LiteNetLib/) [![NuGet](https://img.shields.io/nuget/vpre/LiteNetLib)](https://www.nuget.org/packages/LiteNetLib/#versions-body-tab) [![NuGet](https://img.shields.io/nuget/dt/LiteNetLib)](https://www.nuget.org/packages/LiteNetLib/)
 
 ### [Release builds](https://github.com/RevenantX/LiteNetLib/releases) [![GitHub (pre-)release](https://img.shields.io/github/release/RevenantX/LiteNetLib/all.svg)](https://github.com/RevenantX/LiteNetLib/releases)
 
 ### [DLL build from master](https://ci.appveyor.com/project/RevenantX/litenetlib/branch/master/artifacts) [![](https://ci.appveyor.com/api/projects/status/354501wnvxs8kuh3/branch/master?svg=true)](https://ci.appveyor.com/project/RevenantX/litenetlib/branch/master)
+
 ( Warning! Master branch can be unstable! )
 
 ## Features
 
 * Lightweight
-  * Small CPU and RAM usage
-  * Small packet size overhead ( 1 byte for unreliable, 4 bytes for reliable packets )
+    * Small CPU and RAM usage
+    * Small packet size overhead ( 1 byte for unreliable, 4 bytes for reliable packets )
 * Simple connection handling
 * Peer to peer connections
 * Helper classes for sending and reading messages
 * Multiple data channels
 * Different send mechanics
-  * Reliable with order
-  * Reliable without order
-  * Reliable sequenced (realiable only last packet)
-  * Ordered but unreliable with duplication prevention
-  * Simple UDP packets without order and reliability
+    * Reliable with order
+    * Reliable without order
+    * Reliable sequenced (realiable only last packet)
+    * Ordered but unreliable with duplication prevention
+    * Simple UDP packets without order and reliability
 * Fast packet serializer [(Usage manual)](https://revenantx.github.io/LiteNetLib/articles/netserializerusage.html)
 * Automatic small packets merging
 * Automatic fragmentation of reliable packets
@@ -52,22 +53,27 @@ Lite reliable UDP library for .NET Standard 2.0 (Mono, .NET Core, .NET Framework
 * Unity support
 * Support for .NET8 optimized socket calls (much less gc)
 * Supported platforms:
-  * Windows/Mac/Linux (.NET Framework, Mono, .NET Core, .NET Standard)
-  * Lumin OS (Magic Leap)
-  * Monogame
-  * Godot
-  * Unity 2018.3 (Desktop platforms, Android, iOS, Switch)
-  
+    * Windows/Mac/Linux (.NET Framework, Mono, .NET Core, .NET Standard)
+    * Lumin OS (Magic Leap)
+    * Monogame
+    * Godot
+    * Unity 2018.3 (Desktop platforms, Android, iOS, Switch)
+
 ## Support developer
+
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/revx)
 
 ## Unity notes!!!
-* Minimal supported Unity is 2018.3. For older Unity versions use [0.9.x library](https://github.com/RevenantX/LiteNetLib/tree/0.9) versions
-* Always use library sources or [OpenUPM package](https://openupm.com/packages/com.revenantx.litenetlib/) instead of precompiled DLL files ( because there are platform specific #ifdefs and workarounds for unity bugs )
+
+* Minimal supported Unity is 2018.3. For older Unity versions
+  use [0.9.x library](https://github.com/RevenantX/LiteNetLib/tree/0.9) versions
+* Always use library sources or [OpenUPM package](https://openupm.com/packages/com.revenantx.litenetlib/) instead of
+  precompiled DLL files ( because there are platform specific #ifdefs and workarounds for unity bugs )
 
 ## Usage samples
 
 ### Client
+
 ```csharp
 EventBasedNetListener listener = new EventBasedNetListener();
 NetManager client = new NetManager(listener);
@@ -87,7 +93,9 @@ while (!Console.KeyAvailable)
 
 client.Stop();
 ```
+
 ### Server
+
 ```csharp
 EventBasedNetListener listener = new EventBasedNetListener();
 NetManager server = new NetManager(listener);

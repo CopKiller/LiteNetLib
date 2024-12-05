@@ -1,10 +1,15 @@
 # NetPacketProcessor
+
 Fast specialized for network purposes serializer.<br>
-It supports **classes** with **public properties with "get" and "set"** methods or **classes/structs which implements `INetSerializable`**.<br>
-Serializer adds some overhead to packet size: 64 bit hash of class name and namespace (8 bytes). All other class fields will be as is in resulting packet.
+It supports **classes** with **public properties with "get" and "set"** methods or **classes/structs which
+implements `INetSerializable`**.<br>
+Serializer adds some overhead to packet size: 64 bit hash of class name and namespace (8 bytes). All other class fields
+will be as is in resulting packet.
 
 ## Serialization speed comparsion
-Serialization 100000 times of simple structure from [example](https://github.com/RevenantX/LiteNetLib/blob/master/LibSample/SerializerBenchmark.cs) (`NET 4.5`):
+
+Serialization 100000 times of simple structure
+from [example](https://github.com/RevenantX/LiteNetLib/blob/master/LibSample/SerializerBenchmark.cs) (`NET 4.5`):
 Serializer|Time|Size
 ---|---|---|
 BinaryFormatter|3334 ms|1096 bytes
@@ -13,13 +18,16 @@ NetSerializer (second run)|37 ms|204 bytes
 Raw|24 ms|204 bytes
 
 ## Supported property types
+
 ```csharp
 byte sbyte short ushort int uint long ulong float double bool string char IPEndPoint
 ```
+
 Arrays of all these types (and custom types) are also supported. <br>
 Enums are supported but work a bit slower than other types.
 
 ## Custom types
+
 NetPacketProcessor doesn't support nested structs or classes, but you can register your own custom type processors.<br>
 That useful for game engine types such as Vector3 and Quaternion (in Unity3d).
 
@@ -58,6 +66,7 @@ netPacketProcessor.RegisterNestedType( MyType.Serialize, MyType.Deserialize ); /
 ```
 
 You can also implement INetSerializable interface:
+
 ```csharp
 // Some custom type variant 2: INetSerializable struct
 struct MyType : INetSerializable
@@ -82,7 +91,9 @@ netPacketProcessor = new NetPacketProcessor();
 netPacketProcessor.RegisterNestedType<MyType>(); // Serialization handled automatically thanks to INetSerializable
 ```
 
-If you want to use a class instead of a struct you must implement the INetSerializable interface and provide a constructor: 
+If you want to use a class instead of a struct you must implement the INetSerializable interface and provide a
+constructor:
+
 ```csharp
 // Some custom type variant 3: Class, must implement INetSerializable
 class MyType : INetSerializable
@@ -108,9 +119,12 @@ netPacketProcessor.RegisterNestedType<MyType>(() => { return new SomeMyType(); }
 ```
 
 ## Usage example
-For full example look at source [SerializerBenchmark](https://github.com/RevenantX/LiteNetLib/blob/master/LibSample/SerializerBenchmark.cs)
+
+For full example look at
+source [SerializerBenchmark](https://github.com/RevenantX/LiteNetLib/blob/master/LibSample/SerializerBenchmark.cs)
 
 ### Packet
+
 ```csharp
 class SamplePacket
 {
@@ -122,6 +136,7 @@ class SamplePacket
 ```
 
 ### Sending / recieving
+
 ```csharp
 // Client
 class SomeClientListener : INetEventListener
@@ -171,6 +186,8 @@ class SomeServerListener : INetEventListener
 ```
 
 ### Mini FAQ
+
 Q: `NetPacketProcessor` throws "`Undefined packet in NetDataReader`" but all packets are registered. <br>
-A: This can happen when packet definitions resides in different namespaces. Check that registered packet classes/structs are in the same namespace on both ends. 
+A: This can happen when packet definitions resides in different namespaces. Check that registered packet classes/structs
+are in the same namespace on both ends.
 To avoid this error altogether, use shared code/-assembly for packets.

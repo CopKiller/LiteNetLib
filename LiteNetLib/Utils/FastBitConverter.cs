@@ -2,20 +2,20 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace LiteNetLib.Utils
+namespace LiteNetLib.Utils;
+
+public static class FastBitConverter
 {
-    public static class FastBitConverter
-    {
 #if (LITENETLIB_UNSAFE || NETCOREAPP3_1 || NET5_0 || NETCOREAPP3_0_OR_GREATER) && !BIGENDIAN
 #if LITENETLIB_UNSAFE
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetBytes<T>(byte[] bytes, int startIndex, T value) where T : unmanaged
-        {
-            int size = sizeof(T);
-            if (bytes.Length < startIndex + size)
-                ThrowIndexOutOfRangeException();
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static unsafe void GetBytes<T>(byte[] bytes, int startIndex, T value) where T : unmanaged
+    {
+        var size = sizeof(T);
+        if (bytes.Length < startIndex + size)
+            ThrowIndexOutOfRangeException();
 #if NETCOREAPP3_1 || NET5_0 || NETCOREAPP3_0_OR_GREATER
-            Unsafe.As<byte, T>(ref bytes[startIndex]) = value;
+        Unsafe.As<byte, T>(ref bytes[startIndex]) = value;
 #else
             fixed (byte* ptr = &bytes[startIndex])
             {
@@ -36,7 +36,7 @@ namespace LiteNetLib.Utils
 #endif
             }
 #endif
-        }
+    }
 #else
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void GetBytes<T>(byte[] bytes, int startIndex, T value) where T : unmanaged
@@ -47,7 +47,10 @@ namespace LiteNetLib.Utils
         }
 #endif
 
-        private static void ThrowIndexOutOfRangeException() => throw new IndexOutOfRangeException();
+    private static void ThrowIndexOutOfRangeException()
+    {
+        throw new IndexOutOfRangeException();
+    }
 #else
         [StructLayout(LayoutKind.Explicit)]
         private struct ConverterHelperDouble
@@ -171,5 +174,4 @@ namespace LiteNetLib.Utils
             WriteLittleEndian(bytes, startIndex, value);
         }
 #endif
-    }
 }

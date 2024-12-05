@@ -9,18 +9,18 @@ Lite reliable UDP library for .NET Framework 3.5, Mono, .NET Core 2.0, .NET Stan
 ## Features
 
 * Lightweight
-  * Small CPU and RAM usage
-  * Small packet size overhead ( 1 byte for unreliable, 3 bytes for reliable packets )
+    * Small CPU and RAM usage
+    * Small packet size overhead ( 1 byte for unreliable, 3 bytes for reliable packets )
 * Simple connection handling
 * Peer to peer connections
 * Helper classes for sending and reading messages
 * Multiple data channels
 * Different send mechanics
-  * Reliable with order
-  * Reliable without order
-  * Reliable sequenced (realiable only last packet)
-  * Ordered but unreliable with duplication prevention
-  * Simple UDP packets without order and reliability
+    * Reliable with order
+    * Reliable without order
+    * Reliable sequenced (realiable only last packet)
+    * Ordered but unreliable with duplication prevention
+    * Simple UDP packets without order and reliability
 * Fast packet serializer [(Usage manual)](https://github.com/RevenantX/LiteNetLib/wiki/NetSerializer-usage)
 * Automatic small packets merging
 * Automatic fragmentation of reliable packets
@@ -33,18 +33,21 @@ Lite reliable UDP library for .NET Framework 3.5, Mono, .NET Core 2.0, .NET Stan
 * Multicasting (for discovering hosts in local network)
 * Unity support
 * Supported platforms:
-  * Windows/Mac/Linux (.NET Framework, Mono, .NET Core)
-  * Android (Unity)
-  * iOS (Unity)
-  * UWP Windows 10 including phones
-  * Lumin OS (Magic Leap)
+    * Windows/Mac/Linux (.NET Framework, Mono, .NET Core)
+    * Android (Unity)
+    * iOS (Unity)
+    * UWP Windows 10 including phones
+    * Lumin OS (Magic Leap)
 
 ## Unity notes!!!
-* Always use library sources instead of precompiled DLL files ( because there are platform specific #ifdefs and workarounds for unity bugs )
+
+* Always use library sources instead of precompiled DLL files ( because there are platform specific #ifdefs and
+  workarounds for unity bugs )
 
 ## Usage samples
 
 ### Client
+
 ```csharp
 EventBasedNetListener listener = new EventBasedNetListener();
 NetManager client = new NetManager(listener);
@@ -64,7 +67,9 @@ while (!Console.KeyAvailable)
 
 client.Stop();
 ```
+
 ### Server
+
 ```csharp
 EventBasedNetListener listener = new EventBasedNetListener();
 NetManager server = new NetManager(listener);
@@ -97,45 +102,45 @@ server.Stop();
 ## NetManager settings description
 
 * **UnconnectedMessagesEnabled**
-  * enable messages receiving without connection. (with SendUnconnectedMessage method)
-  * default value: **false**
+    * enable messages receiving without connection. (with SendUnconnectedMessage method)
+    * default value: **false**
 * **NatPunchEnabled**
-  * enable NAT punch messages
-  * default value: **false**
+    * enable NAT punch messages
+    * default value: **false**
 * **UpdateTime**
-  * library logic update (and send) period in milliseconds
-  * default value: **15 msec**.
+    * library logic update (and send) period in milliseconds
+    * default value: **15 msec**.
 * **PingInterval**
-  * Interval for latency detection and checking connection
-  * default value: **1000 msec**.
+    * Interval for latency detection and checking connection
+    * default value: **1000 msec**.
 * **DisconnectTimeout**
-  * if client or server doesn't receive any packet from remote peer during this time then connection will be closed
-  * (including library internal keepalive packets)
-  * default value: **5000 msec**.
+    * if client or server doesn't receive any packet from remote peer during this time then connection will be closed
+    * (including library internal keepalive packets)
+    * default value: **5000 msec**.
 * **SimulatePacketLoss**
-  * simulate packet loss by dropping random amout of packets. (Works only in DEBUG mode)
-  * default value: **false**
+    * simulate packet loss by dropping random amout of packets. (Works only in DEBUG mode)
+    * default value: **false**
 * **SimulateLatency**
-  * simulate latency by holding packets for random time. (Works only in DEBUG mode)
-  * default value: **false**
+    * simulate latency by holding packets for random time. (Works only in DEBUG mode)
+    * default value: **false**
 * **SimulationPacketLossChance**
-  * chance of packet loss when simulation enabled. value in percents.
-  * default value: **10 (%)**
+    * chance of packet loss when simulation enabled. value in percents.
+    * default value: **10 (%)**
 * **SimulationMinLatency**
-  * minimum simulated latency
-  * default value: **30 msec**
+    * minimum simulated latency
+    * default value: **30 msec**
 * **SimulationMaxLatency**
-  * maximum simulated latency
-  * default value: **100 msec**
+    * maximum simulated latency
+    * default value: **100 msec**
 * **BroadcastEnabled**
-  * Allows receive Broadcast packets
-  * default value: **false**
+    * Allows receive Broadcast packets
+    * default value: **false**
 * **ReconnectDelay**
-  * delay betwen connection attempts
-  * default value: **500 msec**
+    * delay betwen connection attempts
+    * default value: **500 msec**
 * **MaxConnectAttempts**
-  * maximum connection attempts before client stops and call disconnect event.
-  * default value: **10**
+    * maximum connection attempts before client stops and call disconnect event.
+    * default value: **10**
 * **UnsyncedEvents**
-  * Experimental feature. Events automatically will be called without PollEvents method from another thread
-  * default value: **false**
+    * Experimental feature. Events automatically will be called without PollEvents method from another thread
+    * default value: **false**
